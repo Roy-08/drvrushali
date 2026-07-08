@@ -307,7 +307,7 @@ export default function Home() {
             >
               <iframe
                 ref={iframeRef}
-                src="https://www.youtube.com/embed/gNVNzNId25U?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=&disablekb=1&fs=0&playsinline=1&loop=1&playlist=gNVNzNId25U&enablejsapi=1"
+                src="https://www.youtube.com/embed/gNVNzNId25U?autoplay=0&mute=0&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=&disablekb=1&fs=0&playsinline=1&loop=1&playlist=gNVNzNId25U&enablejsapi=1"
                 title="Video"
                 allow="autoplay; encrypted-media; picture-in-picture"
                 className="absolute top-0 left-0 w-full h-full"
