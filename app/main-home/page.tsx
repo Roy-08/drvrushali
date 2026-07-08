@@ -398,30 +398,7 @@ export default function MainHomePage() {
               </a>
 
               {/* Uplift Book Button - Secondary (outline) */}
-             <a
-  href="https://amzn.in/d/0apjBoBX"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-block"
-  style={{
-    padding: "14px 32px",
-    borderRadius: "12px",
-    fontSize: "0.95rem",
-    fontFamily: "'Outfit', sans-serif",
-    fontWeight: 700,
-    color: "#4a2060",
-    background: "transparent",
-    border: "2px solid #4a2060",
-    transition: "all 0.3s ease",
-    letterSpacing: "0.03em",
-    textDecoration: "none",
-    display: "inline-block",
-    minWidth: "220px",
-    textAlign: "center",
-  }}
->
-  Uplift Book
-</a>
+ 
             </div>
 
             {/* 3 Stats */}
