@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const steps = [
     "Book a call and fill out the short application in detail",
@@ -112,6 +113,56 @@ export default function Home() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  // Use YouTube postMessage API to disable captions after iframe loads
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    const disableCaptions = () => {
+      try {
+        // Send command to YouTube player via postMessage to disable captions
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({
+            event: "command",
+            func: "setOption",
+            args: ["captions", "track", {}],
+          }),
+          "*"
+        );
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({
+            event: "command",
+            func: "unloadModule",
+            args: ["captions"],
+          }),
+          "*"
+        );
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({
+            event: "command",
+            func: "unloadModule",
+            args: ["cc"],
+          }),
+          "*"
+        );
+      } catch {
+        // silently fail
+      }
+    };
+
+    // Try multiple times to ensure captions get disabled
+    const timers = [
+      setTimeout(disableCaptions, 1000),
+      setTimeout(disableCaptions, 2000),
+      setTimeout(disableCaptions, 3000),
+      setTimeout(disableCaptions, 5000),
+    ];
+
+    return () => {
+      timers.forEach(clearTimeout);
     };
   }, []);
 
@@ -254,21 +305,18 @@ export default function Home() {
                   "0 20px 60px rgba(74,32,96,0.2), 0 8px 24px rgba(239,154,126,0.15)",
               }}
             >
-              <video
-                src="/uplift.mp4"
-                autoPlay
-                loop
-                controls
-                playsInline
-                preload="auto"
-                className="absolute top-0 left-0 w-full h-full object-cover"
+              <iframe
+                ref={iframeRef}
+                src="https://www.youtube.com/embed/gNVNzNId25U?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=&disablekb=1&fs=0&playsinline=1&loop=1&playlist=gNVNzNId25U&enablejsapi=1"
+                title="Video"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                className="absolute top-0 left-0 w-full h-full"
                 style={{
+                  border: "none",
                   borderRadius: "12px",
-                  backgroundColor: "#000",
+                  pointerEvents: "none",
                 }}
-              >
-                Your browser does not support the video tag.
-              </video>
+              />
             </div>
           </div>
         </section>
