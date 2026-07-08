@@ -276,7 +276,7 @@ export default function Home() {
         {/* APPLY NOW BUTTON */}
         <section className="relative z-10 px-4 sm:px-6 pb-8 sm:pb-12 text-center">
           <a
-            href="https://pages.razorpay.com/pl_QzeWz5qOyKRAu3/view"
+            href="https://rzp.io/rzp/pBkF3p7t"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-shine pulse-btn inline-block bg-[#c8963e] text-white font-semibold px-7 sm:px-10 py-3 sm:py-4 rounded-full shadow-lg hover:bg-[#b5842f] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
