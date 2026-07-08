@@ -1,9 +1,9 @@
 "use client";
-
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const steps = [
@@ -116,14 +116,14 @@ export default function Home() {
     };
   }, []);
 
-  // Use YouTube postMessage API to disable captions after iframe loads
+  // Disable captions after video starts playing
   useEffect(() => {
+    if (!isPlaying) return;
     const iframe = iframeRef.current;
     if (!iframe) return;
 
     const disableCaptions = () => {
       try {
-        // Send command to YouTube player via postMessage to disable captions
         iframe.contentWindow?.postMessage(
           JSON.stringify({
             event: "command",
@@ -153,7 +153,6 @@ export default function Home() {
       }
     };
 
-    // Try multiple times to ensure captions get disabled
     const timers = [
       setTimeout(disableCaptions, 1000),
       setTimeout(disableCaptions, 2000),
@@ -164,7 +163,11 @@ export default function Home() {
     return () => {
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, [isPlaying]);
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
 
   return (
     <>
@@ -189,6 +192,10 @@ export default function Home() {
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes playPulse {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.1); }
         }
         .shimmer-gold {
           background: linear-gradient(90deg, #c8963e 0%, #e8c170 30%, #c8963e 50%, #e8c170 70%, #c8963e 100%);
@@ -215,6 +222,9 @@ export default function Home() {
         .fade-in-1 { animation: fadeInUp 0.8s ease-out forwards; }
         .fade-in-2 { animation: fadeInUp 0.8s ease-out 0.2s forwards; opacity: 0; }
         .fade-in-3 { animation: fadeInUp 0.8s ease-out 0.4s forwards; opacity: 0; }
+        .play-pulse {
+          animation: playPulse 2s ease-in-out infinite;
+        }
       `}</style>
 
       <div
@@ -305,18 +315,58 @@ export default function Home() {
                   "0 20px 60px rgba(74,32,96,0.2), 0 8px 24px rgba(239,154,126,0.15)",
               }}
             >
-              <iframe
-                ref={iframeRef}
-                src="https://www.youtube.com/embed/gNVNzNId25U?autoplay=0&mute=0&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=&disablekb=1&fs=0&playsinline=1&loop=1&playlist=gNVNzNId25U&enablejsapi=1"
-                title="Video"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                className="absolute top-0 left-0 w-full h-full"
-                style={{
-                  border: "none",
-                  borderRadius: "12px",
-                  pointerEvents: "none",
-                }}
-              />
+              {!isPlaying ? (
+                /* Thumbnail with Play Button */
+                <div
+                  className="absolute top-0 left-0 w-full h-full cursor-pointer group"
+                  onClick={handlePlay}
+                >
+                  {/* YouTube Thumbnail */}
+                  <img
+                    src="https://img.youtube.com/vi/gNVNzNId25U/maxresdefault.jpg"
+                    alt="Video thumbnail"
+                    className="w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                  />
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-300 rounded-xl sm:rounded-2xl" />
+                  {/* Play Button */}
+                  <div
+                    className="play-pulse absolute top-1/2 left-1/2 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                    style={{
+                      background: "linear-gradient(135deg, #c8963e, #e8c170)",
+                      boxShadow: "0 8px 32px rgba(200,150,62,0.5)",
+                    }}
+                  >
+                    <svg
+                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white ml-1"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  {/* "Click to Play" text */}
+                  <p
+                    className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/90 text-xs sm:text-sm font-medium"
+                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                  >
+                    
+                  </p>
+                </div>
+              ) : (
+                /* YouTube iframe - plays with sound */
+                <iframe
+                  ref={iframeRef}
+                  src="https://www.youtube.com/embed/gNVNzNId25U?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=&disablekb=0&fs=1&playsinline=1&loop=1&playlist=gNVNzNId25U&enablejsapi=1"
+                  title="Video"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  className="absolute top-0 left-0 w-full h-full"
+                  style={{
+                    border: "none",
+                    borderRadius: "12px",
+                  }}
+                />
+              )}
             </div>
           </div>
         </section>
