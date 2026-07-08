@@ -293,7 +293,7 @@ export default function ObtainPage() {
               fontWeight: 500,
               lineHeight: 1.5,
               marginBottom: "0.6rem",
-              ...revealStyle(1),
+              
             }}
           >
             If you are a{" "}
@@ -308,7 +308,7 @@ export default function ObtainPage() {
               fontFamily: "'Outfit', sans-serif",
               fontWeight: 600,
               marginBottom: "1.2rem",
-              ...revealStyle(2),
+              
             }}
           >
             This page is for you.
@@ -322,7 +322,7 @@ export default function ObtainPage() {
               fontWeight: 700,
               lineHeight: 1.5,
               marginBottom: "0.8rem",
-              ...revealStyle(3),
+             
             }}
           >
             We help people resolve{" "}
@@ -339,7 +339,7 @@ export default function ObtainPage() {
     color: "#362E69",
     fontFamily: "'Outfit', sans-serif",
     fontWeight: 300,
-    ...revealStyle(4),
+    
   }}
 >
   Risk free program. Money Back Guarantee.
