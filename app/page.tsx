@@ -164,7 +164,7 @@ export default function ObtainPage() {
         const trimmed = value.trim();
         if (!trimmed) return "Email is required";
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(trimmed)) return "Enter a valid email (e.g., roy@gmail.com)";
+        if (!emailRegex.test(trimmed)) return "Enter a valid email";
         return undefined;
       }
       case "mobile": {
